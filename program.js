@@ -1,8 +1,17 @@
-var arguments = process.argv.splice(2);
+var fs = require('fs');
 
-var total = 0
-arguments.forEach(function(item){
-  total += Number(item);
-});
+var givenFile = process.argv[2];
 
-console.log(total);
+if (givenFile) {
+  // console.log(givenFile);
+
+  var buffer = fs.readFileSync(givenFile);
+  // console.log(buffer);
+  var fileString = buffer.toString()
+  // console.log(fileString);
+
+  var stringArray = fileString.split("\n");
+  console.log(stringArray.length - 1);
+} else {
+  console.log("oh no");
+}
