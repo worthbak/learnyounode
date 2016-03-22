@@ -1,4 +1,4 @@
-var printer = require('./fsprinter.js');
+var printer = require('./modules/fsprinter.js');
 
 var filePath = process.argv[2];
 var fileExtension = process.argv[3];
