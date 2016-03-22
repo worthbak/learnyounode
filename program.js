@@ -1,10 +1,19 @@
-var printer = require('./modules/fsprinter.js');
+var http = require('http');
 
-var filePath = process.argv[2];
-var fileExtension = process.argv[3];
+var url = process.argv[2];
 
-printer(filePath, fileExtension, function(err, list) {
-  list.forEach(function(item) {
-    console.log(item);
+http.get(url, function(response) {
+  response.setEncoding("utf8");
+
+  response.on("data", function(data) {
+    console.log(data);
   });
+
+  /*
+  official solution:
+    response.setEncoding('utf8')
+    response.on('data', console.log)
+    response.on('error', console.error) 
+  */
+
 });
