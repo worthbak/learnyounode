@@ -1,15 +1,17 @@
 var fs = require('fs');
+var path = require('path');
 
-var givenFile = process.argv[2];
+// brittle, but yolo
+var filePath = process.argv[2];
+var fileExtension = "." + process.argv[3];
 
-if (givenFile) {
-  // console.log(givenFile);
+fs.readdir(filePath, function(err, list) {
 
-  fs.readFile(givenFile, function(err, buffer) {
-    // Callback
-    var newLineCount = buffer.toString().split("\n").length - 1
-    console.log(newLineCount);
+  list.forEach(function(item) {
+    var extension = path.extname(item)
+
+    if (extension === fileExtension) {
+      console.log(item);
+    }
   });
-} else {
-  console.log("oh no");
-}
+});
