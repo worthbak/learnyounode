@@ -1,17 +1,10 @@
-var fs = require('fs');
-var path = require('path');
+var printer = require('./fsprinter.js');
 
-// brittle, but yolo
 var filePath = process.argv[2];
-var fileExtension = "." + process.argv[3];
+var fileExtension = process.argv[3];
 
-fs.readdir(filePath, function(err, list) {
-
+printer(filePath, fileExtension, function(err, list) {
   list.forEach(function(item) {
-    var extension = path.extname(item)
-
-    if (extension === fileExtension) {
-      console.log(item);
-    }
+    console.log(item);
   });
 });
