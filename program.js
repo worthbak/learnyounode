@@ -5,13 +5,11 @@ var givenFile = process.argv[2];
 if (givenFile) {
   // console.log(givenFile);
 
-  var buffer = fs.readFileSync(givenFile);
-  // console.log(buffer);
-  var fileString = buffer.toString()
-  // console.log(fileString);
-
-  var stringArray = fileString.split("\n");
-  console.log(stringArray.length - 1);
+  fs.readFile(givenFile, function(err, buffer) {
+    // Callback
+    var newLineCount = buffer.toString().split("\n").length - 1
+    console.log(newLineCount);
+  });
 } else {
   console.log("oh no");
 }
