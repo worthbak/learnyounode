@@ -12,8 +12,10 @@ http.createServer(function (req, res) {
   var result;
 
   if (parsedURL.pathname === '/api/parsetime') {
+    console.log("parsing the time! " + time);
     result = datehelper.parseTime(time);
   } else if (parsedURL.pathname === '/api/unixtime') {
+    console.log("unixifying the time! " + time);
     result = datehelper.unixifyTime(time);
   }
 
