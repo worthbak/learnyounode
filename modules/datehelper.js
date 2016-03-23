@@ -1,3 +1,20 @@
+
+function parseTime(timeString) {
+  var date = new Date(timeString)
+
+  return JSON.stringify({
+       "hour": date.getHours(),
+       "minute": date.getMinutes(),
+       "second": date.getSeconds()
+     });
+}
+
+function unixifyTime(timeString) {
+  return JSON.stringify({
+       "unixtime": new Date(timeString).getTime()
+     });
+}
+
 // Desired date format = "2013-07-06 17:42"
 function getCurrentFormattedDate() {
   var date = new Date();
@@ -12,8 +29,17 @@ function getCurrentFormattedDate() {
   month = padDateDigit(month);
   day = padDateDigit(day);
 
-  var formattedDate = year + "-" + month + "-" + day + " " + hours +":" + minutes
-  return formattedDate
+  var formattedDate = year
+    + "-"
+    + month
+    + "-"
+    + day
+    + " "
+    + hours
+    + ":"
+    + minutes;
+
+  return formattedDate;
 };
 
 function padDateDigit(digit) {
@@ -26,6 +52,6 @@ function padDateDigit(digit) {
   };
 }
 
-// console.log(getCurrentFormattedDate());
-
 module.exports.getCurrentFormattedDate = getCurrentFormattedDate;
+module.exports.parseTime = parseTime;
+module.exports.unixifyTime = unixifyTime;
