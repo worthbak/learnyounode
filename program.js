@@ -7,16 +7,21 @@ var datehelper = require('./modules/datehelper');
 var port = process.argv[2];
 
 http.createServer(function (req, res) {
-  res.writeHead(200, {'Content-Type': 'application/json'});
-
   var parsedURL = url.parse(req.url, true);
+  var time = parsedURL.query.iso;
+  var result;
+
   if (parsedURL.pathname === '/api/parsetime') {
-    res.write(datehelper.parseTime(parsedURL.query.iso));
-    res.end();
+    result = datehelper.parseTime(time);
   } else if (parsedURL.pathname === '/api/unixtime') {
-    res.end(datehelper.unixifyTime(parsedURL.query.iso));
+    result = datehelper.unixifyTime(time);
+  }
+
+  if (result) {
+    res.writeHead(200, {'Content-Type': 'application/json'});
+    res.end(result);
   } else {
-    res.statusCode = 404;
+    res.writeHead(404);
     res.end();
   }
 
