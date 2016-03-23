@@ -1,19 +1,21 @@
 // Requires
 var http = require('http');
-var fs = require('fs');
+var map = require('through2-map');
 
-// Process argument variables
-var arguments = process.argv.splice(2);
-var port = arguments[0];
-var filePath = arguments[1];
+var port = process.argv[2];
 
 var server = http.createServer(function (req, res) {
-  // official solution included this line; was the same otherwise
-  // res.writeHead(200, { 'content-type': 'text/plain' })
+  if (req.method != 'POST') {
+    return res.end('send me a POST!\n');
+  };
 
-  var fileStream = fs.createReadStream(filePath);
+  // req.toString().toUpperCase()
+  req.pipe(map(function (chunk) {
+    return chunk.toString().toUpperCase();
+  })).pipe(res);
 
-  fileStream.pipe(res);
 });
 
-server.listen(port);
+if (port) {
+  server.listen(port);
+}
