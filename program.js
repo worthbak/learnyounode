@@ -16,37 +16,49 @@ http.createServer(function (req, res) {
   var time = parsedURL.query.iso;
   var result;
 
-  if (parsedURL.pathname === '/api/parsetime') {
-    console.log("parsing the time! " + time);
-    result = datehelper.parseTime(time);
-  } else if (parsedURL.pathname === '/api/unixtime') {
-    console.log("unixifying the time! " + time);
-    result = datehelper.unixifyTime(time);
-  } else if (parsedURL.pathname === '/api/gif') {
-    console.log('html test!');
-    fs.readFile('./test.html',function (err, data) {
-      if (err) {
-        console.error(err);
-      }
+  switch (parsedURL.pathname) {
+    case '/api/parsetime':
+      console.log("parsing the time! " + time);
+      result = datehelper.parseTime(time);
+      break;
+    case '/api/unixtime':
+      console.log("unixifying the time! " + time);
+      result = datehelper.unixifyTime(time);
+      break;
+    case '/api/gif':
+      console.log('html test!');
+      fs.readFile('./html/test.html',function (err, data) {
+        if (err) {
+          console.error(err);
+        }
 
-      res.writeHead(200, {
-        'Content-Type': 'text/html',
-        'Content-Length': data.length
+        res.writeHead(200, {
+          'Content-Type': 'text/html',
+          'Content-Length': data.length
+        });
+
+        res.write(data);
+        res.end();
       });
-
-      console.log(data.toString());
-      res.write(data);
-      res.end();
-    });
-    return;
+      return;
+    default:
+      console.log('innacurate pathname');
   }
 
   if (result) {
     res.writeHead(200, {'Content-Type': 'application/json'});
     res.end(result);
   } else {
-    res.writeHead(404);
-    res.end();
+    fs.readFile('./html/404.html',function (err, data) {
+
+      res.writeHead(404, {
+        'Content-Type': 'text/html',
+        'Content-Length': data.length
+      });
+
+      res.write(data);
+      res.end();
+    });
   }
 
 }).listen(port)
