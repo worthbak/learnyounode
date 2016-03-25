@@ -2,9 +2,14 @@
 var http = require('http');
 var url = require('url');
 var map = require('through2-map');
+var fs = require('fs');
 var datehelper = require('./modules/datehelper');
 
 var port = process.argv[2];
+
+if (!port) {
+  port = 8080;
+}
 
 http.createServer(function (req, res) {
   var parsedURL = url.parse(req.url, true);
@@ -17,6 +22,23 @@ http.createServer(function (req, res) {
   } else if (parsedURL.pathname === '/api/unixtime') {
     console.log("unixifying the time! " + time);
     result = datehelper.unixifyTime(time);
+  } else if (parsedURL.pathname === '/api/html-test') {
+    console.log('html test!');
+    fs.readFile('./test.html',function (err, data) {
+      if (err) {
+        console.error(err);
+      }
+
+      res.writeHead(200, {
+        'Content-Type': 'text/html',
+        'Content-Length': data.length
+      });
+
+      console.log(data.toString());
+      res.write(data);
+      res.end();
+    });
+    return;
   }
 
   if (result) {
@@ -28,44 +50,3 @@ http.createServer(function (req, res) {
   }
 
 }).listen(port)
-
-
-/*
-
-official solution
-
-var http = require('http')
-var url = require('url')
-
-function parsetime (time) {
-  return {
-    hour: time.getHours(),
-    minute: time.getMinutes(),
-    second: time.getSeconds()
-  }
-}
-
-function unixtime (time) {
-  return { unixtime : time.getTime() }
-}
-
-var server = http.createServer(function (req, res) {
-  var parsedUrl = url.parse(req.url, true)
-  var time = new Date(parsedUrl.query.iso)
-  var result
-
-  if (/^\/api\/parsetime/.test(req.url))
-    result = parsetime(time)
-  else if (/^\/api\/unixtime/.test(req.url))
-    result = unixtime(time)
-
-  if (result) {
-    res.writeHead(200, { 'Content-Type': 'application/json' })
-    res.end(JSON.stringify(result))
-  } else {
-    res.writeHead(404)
-    res.end()
-  }
-})
-server.listen(Number(process.argv[2]))
-*/
