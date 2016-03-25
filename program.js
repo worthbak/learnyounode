@@ -22,7 +22,7 @@ http.createServer(function (req, res) {
   } else if (parsedURL.pathname === '/api/unixtime') {
     console.log("unixifying the time! " + time);
     result = datehelper.unixifyTime(time);
-  } else if (parsedURL.pathname === '/api/html-test') {
+  } else if (parsedURL.pathname === '/api/gif') {
     console.log('html test!');
     fs.readFile('./test.html',function (err, data) {
       if (err) {
